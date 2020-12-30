@@ -1,0 +1,49 @@
+{% extends 'student_template/base_template.html' %}
+{% block page_title %}
+Payments
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+                    <div class="row">
+              <div class="col-md-12">
+            <!-- general form elements -->
+
+            <!-- /.card -->
+           <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Result</h3>
+              </div>
+
+               <div class="table">
+               <table class="table">
+                   <tr>
+                       <th>ID</th>
+                       <th>Receipt No.</th>
+                       <th>Amount Paid</th>
+                       <th>Date Paid</th>
+                       <th>Balance</th>
+                   </tr>
+                   {% for row in payments %}
+                        <tr>
+                            <td>{{ row.id }}</td>
+                            <td>{{ row.reciept_number }}</td>
+                            <td>{{ row.amount_paid }}</td>
+                            <td>{{ row.date_paid }}</td>
+                            <td>{{ row.balance }}</td>
+
+                        </tr>
+                   {% endfor %}
+               </table>
+               </div>
+            </div>
+
+
+
+          </div>
+          </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}

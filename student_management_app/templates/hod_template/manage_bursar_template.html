@@ -1,0 +1,78 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Manage Bursar
+{% endblock page_title %}
+{% block button %}
+    {% include "hod_template/buttons/bursar.html" %}
+{% endblock %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+
+           <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Bursar Details</h3>
+
+                <div class="card-tools">
+                  <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                    <div class="input-group-append">
+                      <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th>User Name</th>
+                      <th>Email</th>
+                      <th>Address</th>
+                      <th>Gender</th>
+                      <th>Profile Pic</th>
+
+                      <th>Last Login</th>
+                      <th>Date Joined</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for bsr in bursar %}
+                    <tr>
+                      <td>{{ bsr.admin.id }}</td>
+                      <td>{{ bsr.admin.first_name }}</td>
+                      <td>{{ bsr.admin.last_name }}</td>
+                      <td>{{ bsr.admin.username }}</td>
+                      <td>{{ bsr.admin.email }}</td>
+                      <td>{{ bsr.address }}</td>
+                      <td>{{ bsr.gender }}</td>
+                      <td><img src="{{ bsr.profile_pic }}" style="width:100px"/></td>
+
+                      <td>{{ bsr.admin.last_login }}</td>
+                      <td>{{ bsr.admin.date_joined }}</td>
+                      <td><a href="{% url 'edit_bursar' bursar_id=bsr.admin.id %}" class="btn btn-success">Edit</a></td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+

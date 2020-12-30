@@ -1,0 +1,59 @@
+{% load static %}
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="" class="brand-link">
+      <img src="{{ user.bursar.profile_pic }}" alt="{{ user.username }}" style="width:100px;height: 100px; border-radius: 50%">
+      <p>
+          <span class="brand-text font-weight-light">{{ user.username }}</span>
+      </p>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item">
+            {% url 'bursar_home' as bursar_home %}
+            <a href="{{ bursar_home }}" class="nav-link {% if request.path == bursar_home %} active {% endif %}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Home
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            {% url 'add_payment' as add_payment %}
+            <a href="{{ add_payment }}" class="nav-link {% if request.path == add_payment %} active {% endif %}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Add Payment
+              </p>
+            </a>
+          </li>
+
+        <li class="nav-item">
+            {% url 'add_structure' as add_structure %}
+            <a href="{{ add_structure }}" class="nav-link {% if request.path == add_structure %} active {% endif %}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Add Structure
+              </p>
+            </a>
+          </li>
+
+
+
+
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
