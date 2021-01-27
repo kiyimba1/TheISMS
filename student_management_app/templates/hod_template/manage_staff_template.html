@@ -46,15 +46,15 @@ Manage Staff
                   <tbody>
                   {% for staff in staffs %}
                     <tr>
-                      <td>{{ staff.admin.id }}</td>
-                      <td>{{ staff.admin.first_name }}</td>
-                      <td>{{ staff.admin.last_name }}</td>
-                      <td>{{ staff.admin.username }}</td>
-                      <td>{{ staff.admin.email }}</td>
+                      <td>{{ staff.id.id }}</td>
+                      <td>{{ staff.id.first_name }}</td>
+                      <td>{{ staff.id.last_name }}</td>
+                      <td>{{ staff.id.username }}</td>
+                      <td>{{ staff.id.email }}</td>
                       <td>{{ staff.address }}</td>
-                      <td>{{ staff.admin.last_login }}</td>
-                      <td>{{ staff.admin.date_joined }}</td>
-                      <td><a href="/edit_staff/{{ staff.admin.id }}" class="btn btn-success">Edit</a></td>
+                      <td>{{ staff.id.last_login }}</td>
+                      <td>{{ staff.id.date_joined }}</td>
+                      <td><a href="/edit_staff/{{ staff.id.id }}" class="btn btn-success">Edit</a></td>
                     </tr>
                   {% endfor %}
                   </tbody>

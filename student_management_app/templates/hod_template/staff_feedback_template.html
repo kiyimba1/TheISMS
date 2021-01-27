@@ -31,8 +31,8 @@ Staff Feedback
                         {% for feedback in feedbacks %}
                         <tr>
                             <td>{{ feedback.id }}</td>
-                            <td>{{ feedback.staff_id.admin.id }}</td>
-                            <td>{{ feedback.staff_id.admin.first_name }} {{ feedback.staff_id.admin.last_name }}</td>
+                            <td>{{ feedback.staff_id.id.id }}</td>
+                            <td>{{ feedback.staff_id.id.first_name }} {{ feedback.staff_id.id.last_name }}</td>
                             <td>{{ feedback.feedback }}</td>
                             <td>{{ feedback.created_at }}</td>
                             <td>

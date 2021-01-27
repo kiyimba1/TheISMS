@@ -21,7 +21,7 @@ def students(count=100):
             u.students.term_id = Term.objects.get(id=1)
             u.students.gender = ""
             u.students.gender = ""
-            u.students.parent_id = Parents.objects.get(id=1)
+            u.students.parent_id = Parents.objects.all()[0]
             i += 1
         except IntegrityError:
             continue

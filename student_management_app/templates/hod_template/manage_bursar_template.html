@@ -49,18 +49,18 @@ Manage Bursar
                   <tbody>
                   {% for bsr in bursar %}
                     <tr>
-                      <td>{{ bsr.admin.id }}</td>
-                      <td>{{ bsr.admin.first_name }}</td>
-                      <td>{{ bsr.admin.last_name }}</td>
-                      <td>{{ bsr.admin.username }}</td>
-                      <td>{{ bsr.admin.email }}</td>
+                      <td>{{ bsr.id.id }}</td>
+                      <td>{{ bsr.id.first_name }}</td>
+                      <td>{{ bsr.id.last_name }}</td>
+                      <td>{{ bsr.id.username }}</td>
+                      <td>{{ bsr.id.email }}</td>
                       <td>{{ bsr.address }}</td>
                       <td>{{ bsr.gender }}</td>
                       <td><img src="{{ bsr.profile_pic }}" style="width:100px"/></td>
 
-                      <td>{{ bsr.admin.last_login }}</td>
-                      <td>{{ bsr.admin.date_joined }}</td>
-                      <td><a href="{% url 'edit_bursar' bursar_id=bsr.admin.id %}" class="btn btn-success">Edit</a></td>
+                      <td>{{ bsr.id.last_login }}</td>
+                      <td>{{ bsr.id.date_joined }}</td>
+                      <td><a href="{% url 'edit_bursar' bursar_id=bsr.id.id %}" class="btn btn-success">Edit</a></td>
                     </tr>
                   {% endfor %}
                   </tbody>

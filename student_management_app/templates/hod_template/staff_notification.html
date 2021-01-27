@@ -43,11 +43,11 @@ Manage Staff
                   <tbody>
                   {% for staff in staffs %}
                     <tr>
-                      <td>{{ staff.admin.id }}</td>
-                      <td>{{ staff.admin.first_name }}</td>
-                      <td>{{ staff.admin.last_name }}</td>
-                      <td>{{ staff.admin.username }}</td>
-                      <td>{{ staff.admin.email }}</td>
+                      <td>{{ staff.id.id }}</td>
+                      <td>{{ staff.id.first_name }}</td>
+                      <td>{{ staff.id.last_name }}</td>
+                      <td>{{ staff.id.username }}</td>
+                      <td>{{ staff.id.email }}</td>
                       <td><a href="#" class="btn btn-success show_notification" data-toggle="modal" data-target="#myModal">Send Notification</a></td>
                     </tr>
                   {% endfor %}

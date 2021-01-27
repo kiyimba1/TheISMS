@@ -49,18 +49,18 @@ Manage Parent
                   <tbody>
                   {% for parent in parents %}
                     <tr>
-                      <td>{{ parent.admin.id }}</td>
-                      <td>{{ parent.admin.first_name }}</td>
-                      <td>{{ parent.admin.last_name }}</td>
-                      <td>{{ parent.admin.username }}</td>
-                      <td>{{ parent.admin.email }}</td>
+                      <td>{{ parent.id.id }}</td>
+                      <td>{{ parent.id.first_name }}</td>
+                      <td>{{ parent.id.last_name }}</td>
+                      <td>{{ parent.id.username }}</td>
+                      <td>{{ parent.id.email }}</td>
                       <td>{{ parent.address }}</td>
                       <td>{{ parent.gender }}</td>
                       <td><img src="{{ parent.profile_pic }}" style="width:50px;height: 50px; border-radius: 50%"/></td>
 
-                      <td>{{ parent.admin.last_login }}</td>
-                      <td>{{ parent.admin.date_joined }}</td>
-                      <td><a href="{% url 'edit_parent' parent_id=parent.admin.id %}" class="btn btn-success">Edit</a></td>
+                      <td>{{ parent.id.last_login }}</td>
+                      <td>{{ parent.id.date_joined }}</td>
+                      <td><a href="{% url 'edit_parent' parent_id=parent.id.id %}" class="btn btn-success">Edit</a></td>
                     </tr>
                   {% endfor %}
                   </tbody>

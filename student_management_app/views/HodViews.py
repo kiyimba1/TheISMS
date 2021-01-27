@@ -53,7 +53,7 @@ def admin_home(request):
         attendance = Attendance.objects.filter(
             subject_id__in=subject_ids).count()
         leaves = LeaveReportStaff.objects.filter(
-            staff_id=staff.id, leave_status=1).count()
+            staff_id=staff.id.id, leave_status=1).count()
         attendance_present_list_staff.append(attendance)
         attendance_absent_list_staff.append(leaves)
         staff_name_list.append(staff.id.username)
@@ -64,11 +64,11 @@ def admin_home(request):
     student_name_list = []
     for student in students_all:
         attendance = AttendanceReport.objects.filter(
-            student_id=student.id, status=True).count()
+            student_id=student.id.id, status=True).count()
         absent = AttendanceReport.objects.filter(
-            student_id=student.id, status=False).count()
+            student_id=student.id.id, status=False).count()
         leaves = LeaveReportStudent.objects.filter(
-            student_id=student.id, leave_status=1).count()
+            student_id=student.id.id, leave_status=1).count()
         attendance_present_list_student.append(attendance)
         attendance_absent_list_student.append(leaves + absent)
         student_name_list.append(student.id.username)

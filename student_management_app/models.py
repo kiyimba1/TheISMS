@@ -324,7 +324,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         if instance.user_type == 5:
             Students.objects.create(id=instance, clss_id=Clss.objects.get(id=1),
                                     term_id=Term.objects.get(id=1), address="", profile_pic="",
-                                    gender="", parent_id=Parents.objects.get(id=1))
+                                    gender="", parent_id=Parents.objects.all()[0])
 
 
 @receiver(post_save, sender=CustomUser)
