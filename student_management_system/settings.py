@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+# import config
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,6 +29,8 @@ DEBUG = True
 # HEROKU LIVE PROJECT LINK
 # ALLOWED_HOSTS = ["studentmanagementsystem22.herokuapp.com"]
 ALLOWED_HOSTS = ["*"]
+
+# settings = os.environ['CONFIG']
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -80,33 +84,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'student_management_system.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        # =====Enable Only Making Project Live on Heroku====
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        # 'ENGINE':'django.db.backends.mysql',
-        # 'NAME':'student_management_system',
-        # 'USER':'student_management_system',
-        # 'PASSWORD':'student_management_password',
-        # 'HOST':'localhost',
-        # 'PORT':'3306'
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'isms2',
-        'USER': 'isms',
-        'PASSWORD': 'hok56',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-        # 'NAME': os.environ['DBNAME'],
-        # 'USER': os.environ['DBUSERNAME'],
-        # 'PASSWORD': os.environ['DBPASSWORD'],
-        # 'HOST': os.environ['DBHOST'],
-        # 'PORT': '5432',
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -126,6 +103,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -142,22 +126,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+
 # STATIC_URL = '/static/'
 AUTH_USER_MODEL = "student_management_app.CustomUser"
-AUTHENTICATION_BACKENDS = ['student_management_app.services.EmailBackEnd.EmailBackEnd']
-
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH=os.path.join(BASE_DIR,"sent_mails")
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST="smtp.gmail.com"
-# EMAIl_PORT=587
-# EMAIL_HOST_USER="isms.system@gmail.com"
-# EMAIL_HOST_PASSWORD="kiyimba45"
-# EMAIL_USE_TLS=True
+AUTHENTICATION_BACKENDS = [
+    'student_management_app.services.EmailBackEnd.EmailBackEnd']
 
 
-#
+try:
+    if os.environ['CONFIG']:
+        if os.environ['CONFIG'] == 'testing':
+            from config import TestingConfig
+        else:
+            from config import DevelopementConfig
+    else:
+        from config import DevelopementConfig
+except:
+    from config import DevelopementConfig
+
 
 # Enable Only Making Project Live on Heroku
 # STATICFILES_STORAGE='whitenoise.storage.CompressedManifestStaticFilesStorage'

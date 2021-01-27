@@ -13,15 +13,17 @@ class Term(models.Model):
     objects = models.Manager()
 
     class Meta:
-        db_table="Term"
+        db_table = "Term"
 
 
 class CustomUser(AbstractUser):
-    user_type_data = ((1, "HOD"), (2, "Staff"), (3, "Bursar"),(4, "Parent"), (5, "Student"))
-    user_type = models.CharField(default=1, choices=user_type_data, max_length=10)
+    user_type_data = ((1, "HOD"), (2, "Staff"), (3, "Bursar"),
+                      (4, "Parent"), (5, "Student"))
+    user_type = models.CharField(
+        default=1, choices=user_type_data, max_length=10)
 
     class Meta:
-        db_table="User"
+        db_table = "User"
 
 
 class AdminHOD(models.Model):
@@ -33,7 +35,7 @@ class AdminHOD(models.Model):
     objects = models.Manager()
 
     class Meta:
-        db_table="Admin"
+        db_table = "Admin"
 
 
 class Staffs(models.Model):
@@ -46,7 +48,7 @@ class Staffs(models.Model):
     objects = models.Manager()
 
     class Meta:
-        db_table="Staff"
+        db_table = "Staff"
 
 
 class Clss(models.Model):
@@ -57,7 +59,7 @@ class Clss(models.Model):
     objects = models.Manager()
 
     class Meta:
-        db_table="Class"
+        db_table = "Class"
 
 
 class Subjects(models.Model):
@@ -70,9 +72,7 @@ class Subjects(models.Model):
     objects = models.Manager()
 
     class Meta:
-        db_table="Subject"
-
-
+        db_table = "Subject"
 
 
 class Parents(models.Model):
@@ -88,7 +88,8 @@ class Parents(models.Model):
     objects = models.Manager()
 
     class Meta:
-        db_table="Parent"
+        db_table = "Parent"
+
 
 class PaymentStructure(models.Model):
     id = models.AutoField(primary_key=True)
@@ -100,10 +101,11 @@ class PaymentStructure(models.Model):
     amount_to_pay = models.CharField(max_length=12)
     last_updated = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING)
-    objects=models.Manager()
+    objects = models.Manager()
 
     class Meta:
-        db_table="PaymentStructure"
+        db_table = "PaymentStructure"
+
 
 class Students(models.Model):
     id = models.AutoField(primary_key=True)
@@ -119,23 +121,27 @@ class Students(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     fcm_token = models.TextField(default="")
     objects = models.Manager()
+
     class Meta:
-        db_table="Student"
+        db_table = "Student"
+
 
 class Payments(models.Model):
     id = models.AutoField(primary_key=True)
     student_id = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING)
-    added_by = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING, related_name='added_by')
-    payment_structure_id = models.ForeignKey(PaymentStructure, on_delete=models.DO_NOTHING)
+    added_by = models.ForeignKey(
+        CustomUser, on_delete=models.DO_NOTHING, related_name='added_by')
+    payment_structure_id = models.ForeignKey(
+        PaymentStructure, on_delete=models.DO_NOTHING)
     reciept_number = models.CharField(max_length=100)
     amount_paid = models.CharField(max_length=12)
     balance = models.CharField(max_length=12, blank=True, null=True)
     date_paid = models.DateTimeField()
     date_recorded = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
-    class Meta:
-        db_table="Payment"
 
+    class Meta:
+        db_table = "Payment"
 
 
 class Bursar(models.Model):
@@ -145,8 +151,9 @@ class Bursar(models.Model):
     profile_pic = models.FileField()
     address = models.TextField()
     objects = models.Manager()
+
     class Meta:
-        db_table="Bursar"
+        db_table = "Bursar"
 
 
 class Attendance(models.Model):
@@ -157,8 +164,9 @@ class Attendance(models.Model):
     term = models.ForeignKey(Term, on_delete=models.CASCADE)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
     class Meta:
-        db_table="Attendance"
+        db_table = "Attendance"
 
 
 class AttendanceReport(models.Model):
@@ -169,8 +177,9 @@ class AttendanceReport(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
     class Meta:
-        db_table="AttendanceReport"
+        db_table = "AttendanceReport"
 
 
 class LeaveReportStudent(models.Model):
@@ -182,8 +191,9 @@ class LeaveReportStudent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
     class Meta:
-        db_table="StudentLeaveReport"
+        db_table = "StudentLeaveReport"
 
 
 class LeaveReportStaff(models.Model):
@@ -195,8 +205,9 @@ class LeaveReportStaff(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
     class Meta:
-        db_table="StaffLeaveReport"
+        db_table = "StaffLeaveReport"
 
 
 class FeedBackStudent(models.Model):
@@ -207,8 +218,10 @@ class FeedBackStudent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
     class Meta:
-        db_table="StudentFeedBack"
+        db_table = "StudentFeedBack"
+
 
 class FeedBackParent(models.Model):
     id = models.AutoField(primary_key=True)
@@ -218,8 +231,9 @@ class FeedBackParent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
     class Meta:
-        db_table="ParentFeedBack"
+        db_table = "ParentFeedBack"
 
 
 class FeedBackStaffs(models.Model):
@@ -230,8 +244,9 @@ class FeedBackStaffs(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
     class Meta:
-        db_table="StaffFeedBack"
+        db_table = "StaffFeedBack"
 
 
 class NotificationStudent(models.Model):
@@ -241,8 +256,9 @@ class NotificationStudent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
     class Meta:
-        db_table="StudentNotification"
+        db_table = "StudentNotification"
 
 
 class NotificationStaffs(models.Model):
@@ -252,8 +268,9 @@ class NotificationStaffs(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
     class Meta:
-        db_table="StaffNotification"
+        db_table = "StaffNotification"
 
 
 class StudentResult(models.Model):
@@ -269,8 +286,9 @@ class StudentResult(models.Model):
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now_add=True)
     objects = models.Manager()
+
     class Meta:
-        db_table="Result"
+        db_table = "Result"
 
 
 class OnlineClassRoom(models.Model):
@@ -283,8 +301,9 @@ class OnlineClassRoom(models.Model):
     is_active = models.BooleanField(default=True)
     created_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
     class Meta:
-        db_table="OnlineClass"
+        db_table = "OnlineClass"
 
 
 @receiver(post_save, sender=CustomUser)
@@ -299,8 +318,8 @@ def create_user_profile(sender, instance, created, **kwargs):
         if instance.user_type == 4:
             Parents.objects.create(admin=instance)
         if instance.user_type == 5:
-            Students.objects.create(admin=instance, course_id=Courses.objects.get(id=1),
-                                    session_year_id=SessionYearModel.object.get(id=1), address="", profile_pic="",
+            Students.objects.create(admin=instance, clss_id=Clss.objects.get(id=1),
+                                    term_id=Term.objects.get(id=1), address="", profile_pic="",
                                     gender="", parent_id=Parents.objects.get(id=1))
 
 

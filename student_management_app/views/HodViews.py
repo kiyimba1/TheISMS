@@ -29,9 +29,9 @@ def admin_home(request):
     subject_count_list = []
     student_count_list_in_course = []
     for course in course_all:
-        subjects = Subjects.objects.filter(course_id=course.id).count()
-        students = Students.objects.filter(course_id=course.id).count()
-        course_name_list.append(course.course_name)
+        subjects = Subjects.objects.filter(clss_id=course.id).count()
+        students = Students.objects.filter(clss_id=course.id).count()
+        course_name_list.append(Clss.clss_name)
         subject_count_list.append(subjects)
         student_count_list_in_course.append(students)
 
@@ -50,8 +50,10 @@ def admin_home(request):
     staff_name_list = []
     for staff in staffs:
         subject_ids = Subjects.objects.filter(staff_id=staff.admin.id)
-        attendance = Attendance.objects.filter(subject_id__in=subject_ids).count()
-        leaves = LeaveReportStaff.objects.filter(staff_id=staff.id, leave_status=1).count()
+        attendance = Attendance.objects.filter(
+            subject_id__in=subject_ids).count()
+        leaves = LeaveReportStaff.objects.filter(
+            staff_id=staff.id, leave_status=1).count()
         attendance_present_list_staff.append(attendance)
         attendance_absent_list_staff.append(leaves)
         staff_name_list.append(staff.admin.username)
@@ -61,9 +63,12 @@ def admin_home(request):
     attendance_absent_list_student = []
     student_name_list = []
     for student in students_all:
-        attendance = AttendanceReport.objects.filter(student_id=student.id, status=True).count()
-        absent = AttendanceReport.objects.filter(student_id=student.id, status=False).count()
-        leaves = LeaveReportStudent.objects.filter(student_id=student.id, leave_status=1).count()
+        attendance = AttendanceReport.objects.filter(
+            student_id=student.id, status=True).count()
+        absent = AttendanceReport.objects.filter(
+            student_id=student.id, status=False).count()
+        leaves = LeaveReportStudent.objects.filter(
+            student_id=student.id, leave_status=1).count()
         attendance_present_list_student.append(attendance)
         attendance_absent_list_student.append(leaves + absent)
         student_name_list.append(student.admin.username)
@@ -115,15 +120,15 @@ def add_course_save(request):
         return HttpResponse("Method Not Allowed")
     else:
         course = request.POST.get("course")
-        try:
-            course_model = Clss(course_name=course)
-            course_model.save()
-            messages.success(request, "Successfully Added Course")
-            return HttpResponseRedirect(reverse("add_course"))
-        except Exception as e:
-            print(e)
-            messages.error(request, "Failed To Add Course")
-            return HttpResponseRedirect(reverse("add_course"))
+        # try:
+        course_model = Clss(clss_name=course)
+        course_model.save()
+        messages.success(request, "Successfully Added Course")
+        return HttpResponseRedirect(reverse("add_course"))
+        # except Exception as e:
+        #     print(e)
+        #     messages.error(request, "Failed To Add Course")
+        #     return HttpResponseRedirect(reverse("add_course"))
 
 
 def add_student(request):
@@ -160,8 +165,8 @@ def add_student_save(request):
             number = user_number_generatuion.student_number_generator(nationality=nationality, course_id=course_id,
                                                                       session_id=session_year_id)
             if CustomUser.objects.filter(username=number).exists():
-                number = user_number_generatuion.student_number_generator(nationality=nationality, course_id=course_id,
-                                                                          session_id=session_year_id)
+                number = user_number_generatuion.student_number_generator(
+                    nationality=nationality, course_id=course_id,                                          session_id=session_year_id)
             else:
                 pass
             try:
@@ -187,7 +192,8 @@ def add_student_save(request):
                               'User Name: ' + str(user.username) + '\n' \
                                                                    'Password: ' + str(user.username) + '\n' \
                                                                                                        'Please change your password on first login.'
-                    send_mail(subject, message, sender, recipient, fail_silently=False)
+                    send_mail(subject, message, sender,
+                              recipient, fail_silently=False)
                 except:
                     pass
                 # try:
@@ -200,7 +206,8 @@ def add_student_save(request):
                           'User Name: ' + str(user.username) + '\n' \
                                                                'Password: ' + str(user.username) + '\n' \
                                                                                                    'Please change your password on first login.'
-                send_mail(subject, message, sender, recipient, fail_silently=False)
+                send_mail(subject, message, sender,
+                          recipient, fail_silently=False)
                 # except:
                 #     pass
 
@@ -304,11 +311,13 @@ def add_parent_save(request):
                               'User Name: ' + str(user.username) + '\n' \
                                                                    'Password: ' + str(user.username) + '\n' \
                                                                                                        'Please change your password on first login.'
-                    send_mail(subject, message, sender, recipient, fail_silently=False)
+                    send_mail(subject, message, sender,
+                              recipient, fail_silently=False)
                 except:
                     pass
                 try:
-                    client = nexmo.Client(key='95c59113', secret='CQn3Af37lHxnTnU3')
+                    client = nexmo.Client(
+                        key='95c59113', secret='CQn3Af37lHxnTnU3')
                     client.send_message({
                         'from': 'ISMS',
                         'to': str(phone),
@@ -343,7 +352,8 @@ def add_subject_save(request):
         staff = CustomUser.objects.get(id=staff_id)
 
         try:
-            subject = Subjects(subject_name=subject_name, clss_id=course, staff_id=staff)
+            subject = Subjects(subject_name=subject_name,
+                               clss_id=course, staff_id=staff)
             subject.save()
             messages.success(request, "Successfully Added Subject")
             return HttpResponseRedirect(reverse("add_subject"))
@@ -699,7 +709,8 @@ def add_session_save(request):
         session_end_year = request.POST.get("session_end")
 
         try:
-            sessionyear = Term(session_start_year=session_start_year, session_end_year=session_end_year)
+            sessionyear = Term(
+                term_start_date=session_start_year, term_end_date=session_end_year)
             sessionyear.save()
             messages.success(request, "Successfully Added Session")
             return HttpResponseRedirect(reverse("manage_session"))
@@ -806,7 +817,7 @@ def staff_disapprove_leave(request, leave_id):
 
 def admin_view_attendance(request):
     subjects = Subjects.objects.all()
-    session_year_id = Term.object.all()
+    session_year_id = Term.objects.all()
     return render(request, "hod_template/admin_view_attendance.html",
                   {"subjects": subjects, "session_year_id": session_year_id})
 
@@ -817,7 +828,8 @@ def admin_get_attendance_dates(request):
     session_year_id = request.POST.get("session_year_id")
     subject_obj = Subjects.objects.get(id=subject)
     session_year_obj = Term.object.get(id=session_year_id)
-    attendance = Attendance.objects.filter(subject_id=subject_obj, session_year_id=session_year_obj)
+    attendance = Attendance.objects.filter(
+        subject_id=subject_obj, session_year_id=session_year_obj)
     attendance_obj = []
     for attendance_single in attendance:
         data = {"id": attendance_single.id, "attendance_date": str(attendance_single.attendance_date),
@@ -896,7 +908,8 @@ def send_student_notification(request):
         },
         "to": token
     }
-    headers = {"Content-Type": "application/json", "Authorization": "key=SERVER_KEY_HERE"}
+    headers = {"Content-Type": "application/json",
+               "Authorization": "key=SERVER_KEY_HERE"}
     data = requests.post(url, data=json.dumps(body), headers=headers)
     notification = NotificationStudent(student_id=student, message=message)
     notification.save()
@@ -920,7 +933,8 @@ def send_staff_notification(request):
         },
         "to": token
     }
-    headers = {"Content-Type": "application/json", "Authorization": "key=SERVER_KEY_HERE"}
+    headers = {"Content-Type": "application/json",
+               "Authorization": "key=SERVER_KEY_HERE"}
     data = requests.post(url, data=json.dumps(body), headers=headers)
     notification = NotificationStaffs(staff_id=staff, message=message)
     notification.save()
