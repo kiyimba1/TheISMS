@@ -49,14 +49,14 @@ def admin_home(request):
     attendance_absent_list_staff = []
     staff_name_list = []
     for staff in staffs:
-        subject_ids = Subjects.objects.filter(staff_id=staff.admin.id)
+        subject_ids = Subjects.objects.filter(staff_id=staff.id.id)
         attendance = Attendance.objects.filter(
             subject_id__in=subject_ids).count()
         leaves = LeaveReportStaff.objects.filter(
             staff_id=staff.id, leave_status=1).count()
         attendance_present_list_staff.append(attendance)
         attendance_absent_list_staff.append(leaves)
-        staff_name_list.append(staff.admin.username)
+        staff_name_list.append(staff.id.username)
 
     students_all = Students.objects.all()
     attendance_present_list_student = []
@@ -71,7 +71,7 @@ def admin_home(request):
             student_id=student.id, leave_status=1).count()
         attendance_present_list_student.append(attendance)
         attendance_absent_list_student.append(leaves + absent)
-        student_name_list.append(student.admin.username)
+        student_name_list.append(student.id.username)
 
     return render(request, "hod_template/home_content.html",
                   {"student_count": student_count1, "staff_count": staff_count, "subject_count": subject_count,
@@ -199,7 +199,7 @@ def add_student_save(request):
                 # try:
                 sender = 'isms.system@gmail.com'
                 subject = 'Welcome Aboard!!'
-                parent_email = parent.admin.email
+                parent_email = parent.id.email
                 recipient = [parent_email]
                 message = 'Student now Sucessfully registered.\n' \
                           'Use the following iformation for their first login\n' \
@@ -393,7 +393,7 @@ def manage_subject(request):
 
 
 def edit_staff(request, staff_id):
-    staff = Staffs.objects.get(admin=staff_id)
+    staff = Staffs.objects.get(id=staff_id)
     return render(request, "hod_template/edit_staff_template.html", {"staff": staff, "id": staff_id})
 
 
@@ -414,7 +414,7 @@ def edit_staff_save(request):
             user.email = email
             user.save()
 
-            staff_model = Staffs.objects.get(admin=staff_id)
+            staff_model = Staffs.objects.get(id=staff_id)
             staff_model.address = address
             staff_model.save()
             messages.success(request, "Successfully Edited Staff")
@@ -426,50 +426,50 @@ def edit_staff_save(request):
 
 def edit_student(request, student_id):
     request.session['student_id'] = student_id
-    student = Students.objects.get(admin=student_id)
+    student = Students.objects.get(id=student_id)
     form = EditStudentForm()
-    form.fields['email'].initial = student.admin.email
-    form.fields['first_name'].initial = student.admin.first_name
-    form.fields['last_name'].initial = student.admin.last_name
+    form.fields['email'].initial = student.id.email
+    form.fields['first_name'].initial = student.id.first_name
+    form.fields['last_name'].initial = student.id.last_name
 
     form.fields['address'].initial = student.address
     form.fields['course'].initial = student.course_id.id
     form.fields['sex'].initial = student.gender
     form.fields['session_year_id'].initial = student.session_year_id.id
     return render(request, "hod_template/edit_student_template.html",
-                  {"form": form, "id": student_id, "username": student.admin.username})
+                  {"form": form, "id": student_id, "username": student.id.username})
 
 
 def edit_parent(request, parent_id):
     request.session['parent_id'] = parent_id
-    parent = Parents.objects.get(admin=parent_id)
+    parent = Parents.objects.get(id=parent_id)
     form = EditParentForm()
-    form.fields['email'].initial = parent.admin.email
-    form.fields['first_name'].initial = parent.admin.first_name
-    form.fields['last_name'].initial = parent.admin.last_name
+    form.fields['email'].initial = parent.id.email
+    form.fields['first_name'].initial = parent.id.first_name
+    form.fields['last_name'].initial = parent.id.last_name
 
     form.fields['address'].initial = parent.address
 
     form.fields['sex'].initial = parent.gender
 
     return render(request, "hod_template/edit_parent_template.html",
-                  {"form": form, "id": parent_id, "username": parent.admin.username})
+                  {"form": form, "id": parent_id, "username": parent.id.username})
 
 
 def edit_bursar(request, bursar_id):
     request.session['bursar_id'] = bursar_id
-    bursar = Bursar.objects.get(admin=bursar_id)
+    bursar = Bursar.objects.get(id=bursar_id)
     form = EditBursarForm()
-    form.fields['email'].initial = bursar.admin.email
-    form.fields['first_name'].initial = bursar.admin.first_name
-    form.fields['last_name'].initial = bursar.admin.last_name
+    form.fields['email'].initial = bursar.id.email
+    form.fields['first_name'].initial = bursar.id.first_name
+    form.fields['last_name'].initial = bursar.id.last_name
 
     form.fields['address'].initial = bursar.address
 
     form.fields['sex'].initial = bursar.gender
 
     return render(request, "hod_template/edit_bursar_template.html",
-                  {"form": form, "id": bursar_id, "username": bursar.admin.username})
+                  {"form": form, "id": bursar_id, "username": bursar.id.username})
 
 
 def edit_parent_save(request):
@@ -506,7 +506,7 @@ def edit_parent_save(request):
                 user.email = email
                 user.save()
 
-                parent = Parents.objects.get(admin=parent_id)
+                parent = Parents.objects.get(id=parent_id)
                 parent.address = address
 
                 parent.gender = sex
@@ -522,9 +522,9 @@ def edit_parent_save(request):
                 return HttpResponseRedirect(reverse("edit_parent", kwargs={"parent_id": parent_id}))
         else:
             form = EditStudentForm(request.POST)
-            parent = Parents.objects.get(admin=parent_id)
+            parent = Parents.objects.get(id=parent_id)
             return render(request, "hod_template/edit_student_template.html",
-                          {"form": form, "id": parent_id, "username": parent.admin.username})
+                          {"form": form, "id": parent_id, "username": parent.id.username})
 
 
 def edit_bursar_save(request):
@@ -561,7 +561,7 @@ def edit_bursar_save(request):
                 user.email = email
                 user.save()
 
-                parent = Parents.objects.get(admin=bursar_id)
+                parent = Parents.objects.get(id=bursar_id)
                 parent.address = address
 
                 parent.gender = sex
@@ -577,9 +577,9 @@ def edit_bursar_save(request):
                 return HttpResponseRedirect(reverse("edit_parent", kwargs={"bursar_id": bursar_id}))
         else:
             form = EditBursarForm(request.POST)
-            bursar = Bursar.objects.get(admin=bursar_id)
+            bursar = Bursar.objects.get(id=bursar_id)
             return render(request, "hod_template/edit_student_template.html",
-                          {"form": form, "id": bursar_id, "username": bursar.admin.username})
+                          {"form": form, "id": bursar_id, "username": bursar.id.username})
 
 
 def edit_student_save(request):
@@ -617,7 +617,7 @@ def edit_student_save(request):
                 user.email = email
                 user.save()
 
-                student = Students.objects.get(admin=student_id)
+                student = Students.objects.get(id=student_id)
                 student.address = address
                 session_year = Term.object.get(id=session_year_id)
                 student.session_year_id = session_year
@@ -635,9 +635,9 @@ def edit_student_save(request):
                 return HttpResponseRedirect(reverse("edit_student", kwargs={"student_id": student_id}))
         else:
             form = EditStudentForm(request.POST)
-            student = Students.objects.get(admin=student_id)
+            student = Students.objects.get(id=student_id)
             return render(request, "hod_template/edit_student_template.html",
-                          {"form": form, "id": student_id, "username": student.admin.username})
+                          {"form": form, "id": student_id, "username": student.id.username})
 
 
 def edit_subject(request, subject_id):
@@ -848,8 +848,8 @@ def admin_get_attendance_student(request):
     list_data = []
 
     for student in attendance_data:
-        data_small = {"id": student.student_id.admin.id,
-                      "name": student.student_id.admin.first_name + " " + student.student_id.admin.last_name,
+        data_small = {"id": student.student_id.id.id,
+                      "name": student.student_id.id.first_name + " " + student.student_id.id.last_name,
                       "status": student.status}
         list_data.append(data_small)
     return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
@@ -896,7 +896,7 @@ def admin_send_notification_staff(request):
 def send_student_notification(request):
     id = request.POST.get("id")
     message = request.POST.get("message")
-    student = Students.objects.get(admin=id)
+    student = Students.objects.get(id=id)
     token = student.fcm_token
     url = "https://fcm.googleapis.com/fcm/send"
     body = {
@@ -921,7 +921,7 @@ def send_student_notification(request):
 def send_staff_notification(request):
     id = request.POST.get("id")
     message = request.POST.get("message")
-    staff = Staffs.objects.get(admin=id)
+    staff = Staffs.objects.get(id=id)
     token = staff.fcm_token
     url = "https://fcm.googleapis.com/fcm/send"
     body = {

@@ -28,31 +28,36 @@ def staff_home(request):
         if course_id not in final_course:
             final_course.append(course_id)
 
-    students_count = Students.objects.filter(course_id__in=final_course).count()
+    students_count = Students.objects.filter(clss_id__in=final_course).count()
 
     # Fetch All Attendance Count
-    attendance_count = Attendance.objects.filter(subject_id__in=subjects).count()
+    attendance_count = Attendance.objects.filter(
+        subject_id__in=subjects).count()
 
     # Fetch All Approve Leave
     staff = Staffs.objects.get(admin=request.user.id)
-    leave_count = LeaveReportStaff.objects.filter(staff_id=staff.id, leave_status=1).count()
+    leave_count = LeaveReportStaff.objects.filter(
+        staff_id=staff.id, leave_status=1).count()
     subject_count = subjects.count()
 
     # Fetch Attendance Data by Subject
     subject_list = []
     attendance_list = []
     for subject in subjects:
-        attendance_count1 = Attendance.objects.filter(subject_id=subject.id).count()
+        attendance_count1 = Attendance.objects.filter(
+            subject_id=subject.id).count()
         subject_list.append(subject.subject_name)
         attendance_list.append(attendance_count1)
 
-    students_attendance = Students.objects.filter(course_id__in=final_course)
+    students_attendance = Students.objects.filter(clss_id__in=final_course)
     student_list = []
     student_list_attendance_present = []
     student_list_attendance_absent = []
     for student in students_attendance:
-        attendance_present_count = AttendanceReport.objects.filter(status=True, student_id=student.id).count()
-        attendance_absent_count = AttendanceReport.objects.filter(status=False, student_id=student.id).count()
+        attendance_present_count = AttendanceReport.objects.filter(
+            status=True, student_id=student.id).count()
+        attendance_absent_count = AttendanceReport.objects.filter(
+            status=False, student_id=student.id).count()
         student_list.append(student.admin.username)
         student_list_attendance_present.append(attendance_present_count)
         student_list_attendance_absent.append(attendance_absent_count)
@@ -66,7 +71,7 @@ def staff_home(request):
 
 def staff_take_attendance(request):
     subjects = Subjects.objects.filter(staff_id=request.user.id)
-    session_years = Term.object.all()
+    session_years = Term.objects.all()
     return render(request, "staff_template/staff_take_attendance.html",
                   {"subjects": subjects, "session_years": session_years})
 
@@ -78,11 +83,13 @@ def get_students(request):
 
     subject = Subjects.objects.get(id=subject_id)
     session_model = Term.object.get(id=session_year)
-    students = Students.objects.filter(course_id=subject.course_id, session_year_id=session_model)
+    students = Students.objects.filter(
+        course_id=subject.course_id, session_year_id=session_model)
     list_data = []
 
     for student in students:
-        data_small = {"id": student.admin.id, "name": student.admin.first_name + " " + student.admin.last_name}
+        data_small = {"id": student.admin.id,
+                      "name": student.admin.first_name + " " + student.admin.last_name}
         list_data.append(data_small)
     return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
 
@@ -106,7 +113,8 @@ def save_attendance_data(request):
 
         for stud in json_sstudent:
             student = Students.objects.get(admin=stud['id'])
-            attendance_report = AttendanceReport(student_id=student, attendance_id=attendance, status=stud['status'])
+            attendance_report = AttendanceReport(
+                student_id=student, attendance_id=attendance, status=stud['status'])
             attendance_report.save()
         return HttpResponse("OK")
     except:
@@ -115,7 +123,7 @@ def save_attendance_data(request):
 
 def staff_update_attendance(request):
     subjects = Subjects.objects.filter(staff_id=request.user.id)
-    session_year_id = Term.object.all()
+    session_year_id = Term.objects.all()
     return render(request, "staff_template/staff_update_attendance.html",
                   {"subjects": subjects, "session_year_id": session_year_id})
 
@@ -126,7 +134,8 @@ def get_attendance_dates(request):
     session_year_id = request.POST.get("session_year_id")
     subject_obj = Subjects.objects.get(id=subject)
     session_year_obj = Term.object.get(id=session_year_id)
-    attendance = Attendance.objects.filter(subject_id=subject_obj, session_year_id=session_year_obj)
+    attendance = Attendance.objects.filter(
+        subject_id=subject_obj, session_year_id=session_year_obj)
     attendance_obj = []
     for attendance_single in attendance:
         data = {"id": attendance_single.id, "attendance_date": str(attendance_single.attendance_date),
@@ -163,7 +172,8 @@ def save_updateattendance_data(request):
     try:
         for stud in json_sstudent:
             student = Students.objects.get(admin=stud['id'])
-            attendance_report = AttendanceReport.objects.get(student_id=student, attendance_id=attendance)
+            attendance_report = AttendanceReport.objects.get(
+                student_id=student, attendance_id=attendance)
             attendance_report.status = stud['status']
             attendance_report.save()
         return HttpResponse("OK")
@@ -210,7 +220,8 @@ def staff_feedback_save(request):
 
         staff_obj = Staffs.objects.get(admin=request.user.id)
         try:
-            feedback = FeedBackStaffs(staff_id=staff_obj, feedback=feedback_msg, feedback_reply="")
+            feedback = FeedBackStaffs(
+                staff_id=staff_obj, feedback=feedback_msg, feedback_reply="")
             feedback.save()
             messages.success(request, "Successfully Sent Feedback")
             return HttpResponseRedirect(reverse("staff_feedback"))
@@ -271,7 +282,7 @@ def staff_all_notification(request):
 
 def staff_add_result(request):
     subjects = Subjects.objects.filter(staff_id=request.user.id)
-    session_years = Term.object.all()
+    session_years = Term.objects.all()
     return render(request, "staff_template/staff_add_result.html",
                   {"subjects": subjects, "session_years": session_years})
 
@@ -294,9 +305,11 @@ def save_student_result(request):
     subject_obj = Subjects.objects.get(id=subject_id)
 
     try:
-        check_exist = StudentResult.objects.filter(subject_id=subject_obj, student_id=student_obj).exists()
+        check_exist = StudentResult.objects.filter(
+            subject_id=subject_obj, student_id=student_obj).exists()
         if check_exist:
-            result = StudentResult.objects.get(subject_id=subject_obj, student_id=student_obj)
+            result = StudentResult.objects.get(
+                subject_id=subject_obj, student_id=student_obj)
             result.subject_assignment_marks = assignment_marks
             result.subject_exam_marks = exam_marks
             result.save()
@@ -319,10 +332,13 @@ def fetch_result_student(request):
     subject_id = request.POST.get('subject_id')
     student_id = request.POST.get('student_id')
     student_obj = Students.objects.get(admin=student_id)
-    result = StudentResult.objects.filter(student_id=student_obj.id, subject_id=subject_id).exists()
+    result = StudentResult.objects.filter(
+        student_id=student_obj.id, subject_id=subject_id).exists()
     if result:
-        result = StudentResult.objects.get(student_id=student_obj.id, subject_id=subject_id)
-        result_data = {"exam_marks": result.subject_exam_marks, "assign_marks": result.subject_assignment_marks}
+        result = StudentResult.objects.get(
+            student_id=student_obj.id, subject_id=subject_id)
+        result_data = {"exam_marks": result.subject_exam_marks,
+                       "assign_marks": result.subject_assignment_marks}
         return HttpResponse(json.dumps(result_data))
     else:
         return HttpResponse("False")
@@ -330,7 +346,7 @@ def fetch_result_student(request):
 
 def start_live_classroom(request):
     subjects = Subjects.objects.filter(staff_id=request.user.id)
-    session_years = Term.object.all()
+    session_years = Term.objects.all()
     return render(request, "staff_template/start_live_classroom.html",
                   {"subjects": subjects, "session_years": session_years})
 
@@ -341,9 +357,11 @@ def start_live_classroom_process(request):
 
     subject_obj = Subjects.objects.get(id=subject)
     session_obj = Term.object.get(id=session_year)
-    checks = OnlineClassRoom.objects.filter(subject=subject_obj, session_years=session_obj, is_active=True).exists()
+    checks = OnlineClassRoom.objects.filter(
+        subject=subject_obj, session_years=session_obj, is_active=True).exists()
     if checks:
-        data = OnlineClassRoom.objects.get(subject=subject_obj, session_years=session_obj, is_active=True)
+        data = OnlineClassRoom.objects.get(
+            subject=subject_obj, session_years=session_obj, is_active=True)
         room_pwd = data.room_pwd
         roomname = data.room_name
     else:

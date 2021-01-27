@@ -27,8 +27,8 @@ class CustomUser(AbstractUser):
 
 
 class AdminHOD(models.Model):
-    id = models.AutoField(primary_key=True)
-    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    id = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, primary_key=True)
     profile_pic = models.FileField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -39,8 +39,9 @@ class AdminHOD(models.Model):
 
 
 class Staffs(models.Model):
-    id = models.AutoField(primary_key=True)
-    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    id = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, primary_key=True)
+    # admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -76,8 +77,9 @@ class Subjects(models.Model):
 
 
 class Parents(models.Model):
-    id = models.AutoField(primary_key=True)
-    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    id = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, primary_key=True)
+    # admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     gender = models.CharField(max_length=8)
     profile_pic = models.FileField()
     phone = models.CharField(max_length=15)
@@ -108,8 +110,9 @@ class PaymentStructure(models.Model):
 
 
 class Students(models.Model):
-    id = models.AutoField(primary_key=True)
-    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    id = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, primary_key=True)
+    # admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     nationality = models.CharField(max_length=24)
     gender = models.CharField(max_length=255)
     profile_pic = models.FileField()
@@ -145,8 +148,9 @@ class Payments(models.Model):
 
 
 class Bursar(models.Model):
-    id = models.AutoField(primary_key=True)
-    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    id = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, primary_key=True)
+    # admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     gender = models.CharField(max_length=12)
     profile_pic = models.FileField()
     address = models.TextField()
@@ -238,7 +242,7 @@ class FeedBackParent(models.Model):
 
 class FeedBackStaffs(models.Model):
     id = models.AutoField(primary_key=True)
-    staff_id = models.ForeignKey(Staffs, on_delete=models.CASCADE)
+    staff_id = models.ForeignKey(Staffs, on_delete=models.DO_NOTHING)
     feedback = models.TextField()
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -310,15 +314,15 @@ class OnlineClassRoom(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         if instance.user_type == 1:
-            AdminHOD.objects.create(admin=instance)
+            AdminHOD.objects.create(id=instance)
         if instance.user_type == 2:
-            Staffs.objects.create(admin=instance, address="")
+            Staffs.objects.create(id=instance, address="")
         if instance.user_type == 3:
-            Bursar.objects.create(admin=instance)
+            Bursar.objects.create(id=instance)
         if instance.user_type == 4:
-            Parents.objects.create(admin=instance)
+            Parents.objects.create(id=instance)
         if instance.user_type == 5:
-            Students.objects.create(admin=instance, clss_id=Clss.objects.get(id=1),
+            Students.objects.create(id=instance, clss_id=Clss.objects.get(id=1),
                                     term_id=Term.objects.get(id=1), address="", profile_pic="",
                                     gender="", parent_id=Parents.objects.get(id=1))
 
