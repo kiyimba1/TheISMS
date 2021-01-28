@@ -19,7 +19,7 @@ def staff_home(request):
     subjects = Subjects.objects.filter(staff_id=request.user.id)
     course_id_list = []
     for subject in subjects:
-        course = Clss.objects.get(id=subject.course_id.id)
+        course = Clss.objects.get(id=subject.clss_id.id)
         course_id_list.append(course.id)
 
     final_course = []
@@ -35,9 +35,9 @@ def staff_home(request):
         subject_id__in=subjects).count()
 
     # Fetch All Approve Leave
-    staff = Staffs.objects.get(admin=request.user.id)
+    staff = Staffs.objects.get(id=request.user.id)
     leave_count = LeaveReportStaff.objects.filter(
-        staff_id=staff.id, leave_status=1).count()
+        staff_id=staff.id.id, leave_status=1).count()
     subject_count = subjects.count()
 
     # Fetch Attendance Data by Subject
@@ -55,10 +55,10 @@ def staff_home(request):
     student_list_attendance_absent = []
     for student in students_attendance:
         attendance_present_count = AttendanceReport.objects.filter(
-            status=True, student_id=student.id).count()
+            status=True, student_id=student.id.id).count()
         attendance_absent_count = AttendanceReport.objects.filter(
-            status=False, student_id=student.id).count()
-        student_list.append(student.admin.username)
+            status=False, student_id=student.id.id).count()
+        student_list.append(student.id.username)
         student_list_attendance_present.append(attendance_present_count)
         student_list_attendance_absent.append(attendance_absent_count)
 
@@ -82,14 +82,14 @@ def get_students(request):
     session_year = request.POST.get("session_year")
 
     subject = Subjects.objects.get(id=subject_id)
-    session_model = Term.object.get(id=session_year)
+    session_model = Term.objects.get(id=session_year)
     students = Students.objects.filter(
-        course_id=subject.course_id, session_year_id=session_model)
+        clss_id=subject.clss_id, term_id=session_model)
     list_data = []
 
     for student in students:
-        data_small = {"id": student.admin.id,
-                      "name": student.admin.first_name + " " + student.admin.last_name}
+        data_small = {"id": student.id.id,
+                      "name": student.id.first_name + " " + student.id.last_name}
         list_data.append(data_small)
     return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
 
@@ -102,23 +102,25 @@ def save_attendance_data(request):
     session_year_id = request.POST.get("session_year_id")
 
     subject_model = Subjects.objects.get(id=subject_id)
-    session_model = Term.object.get(id=session_year_id)
+    session_model = Term.objects.get(id=session_year_id)
     json_sstudent = json.loads(student_ids)
     # print(data[0]['id'])
 
-    try:
-        attendance = Attendance(subject_id=subject_model, attendance_date=attendance_date,
-                                session_year_id=session_model)
-        attendance.save()
+    # try:
+    print(attendance_date)
+    attendance = Attendance(subject_id=subject_model, attendance_date=attendance_date,
+                            term_id=session_model.id)
+    attendance.save()
 
-        for stud in json_sstudent:
-            student = Students.objects.get(admin=stud['id'])
-            attendance_report = AttendanceReport(
-                student_id=student, attendance_id=attendance, status=stud['status'])
-            attendance_report.save()
-        return HttpResponse("OK")
-    except:
-        return HttpResponse("ERR")
+    for stud in json_sstudent:
+        student = Students.objects.get(id=stud['id'])
+        attendance_report = AttendanceReport(
+            student_id=student, attendance_id=attendance, status=stud['status'])
+        attendance_report.save()
+    return HttpResponse("OK")
+    # except:
+    #     print(attendance_date)
+    #     return HttpResponse("ERR")
 
 
 def staff_update_attendance(request):
@@ -207,7 +209,7 @@ def staff_apply_leave_save(request):
 
 
 def staff_feedback(request):
-    staff_id = Staffs.objects.get(admin=request.user.id)
+    staff_id = Staffs.objects.get(id=request.user.id)
     feedback_data = FeedBackStaffs.objects.filter(staff_id=staff_id)
     return render(request, "staff_template/staff_feedback.html", {"feedback_data": feedback_data})
 
@@ -294,14 +296,14 @@ def save_student_result(request):
     assignment_marks = request.POST.get('assignment_marks')
     exam_marks = request.POST.get('exam_marks')
     subject_id = request.POST.get('subject')
-    term_id = request.POST.get('term')
+    term_id = request.POST.get('session_year')
     aggregate = request.POST.get('aggregate')
     remark = request.POST.get('remark')
     staff_id = request.user.id
 
     staff_obj = CustomUser.objects.get(id=staff_id)
     term_obj = Term.objects.get(id=term_id)
-    student_obj = Students.objects.get(admin=student_admin_id)
+    student_obj = Students.objects.get(id=student_admin_id)
     subject_obj = Subjects.objects.get(id=subject_id)
 
     try:

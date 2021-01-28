@@ -39,8 +39,8 @@ def admin_home(request):
     subject_list = []
     student_count_list_in_subject = []
     for subject in subjects_all:
-        course = Clss.objects.get(id=subject.course_id.id)
-        student_count = Students.objects.filter(course_id=course.id).count()
+        course = Clss.objects.get(id=subject.clss_id.id)
+        student_count = Students.objects.filter(clss_id=course.id).count()
         subject_list.append(subject.subject_name)
         student_count_list_in_subject.append(student_count)
 
@@ -393,7 +393,9 @@ def manage_subject(request):
 
 
 def edit_staff(request, staff_id):
+
     staff = Staffs.objects.get(id=staff_id)
+    print(staff)
     return render(request, "hod_template/edit_staff_template.html", {"staff": staff, "id": staff_id})
 
 
